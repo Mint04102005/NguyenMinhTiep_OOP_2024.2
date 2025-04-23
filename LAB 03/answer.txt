@@ -1,0 +1,40 @@
+*Question:
+Alternatively, to compare items in the cart, instead of using the Comparator class I have 
+mentioned, you can use the Comparable interface1 and override the compareTo()method. You can 
+refer to the Java docs to see the information of this interface.  
+Suppose we are taking this Comparable interface approach. 
+-What class should implement the Comparable interface? - - - 
+-In those classes, how should you implement the compareTo()method to reflect the ordering that we want? 
+-Can we have two ordering rules of the item (by title then cost and by cost then title) if we use this Comparable interface approach? 
+-Suppose the DVDs have a different ordering rule from the other media types, that is by title, then decreasing length, then cost. How would you modify your code to allow this?
+
+*Answer:
+1) What class should implement the Comparable interface?(Lớp nào nên triển khai interface Comparable?)
+	-Lớp Media nên triển khai interface Comparable<Media>, vì đây là lớp cha chung của các 	loại phương tiện như DVD, CD và Book.
+
+	-Khi lớp Media triển khai Comparable, bạn có thể sử dụng Collections.sort() để sắp xếp các đối tượng Media trong danh sách mà không cần truyền Comparator.
+2)In those classes, how should you implement the compareTo()method to reflect the ordering that we want? (Nên cài đặt phương thức compareTo() như thế nào để sắp xếp theo tiêu chí mong muốn?)
+
+	-Giả sử ta muốn sắp xếp theo tiêu đề (title) tăng dần, sau đó là giá (cost) giảm dần nếu tiêu đề giống nhau:
+	@Override
+	public int compareTo(Media other) {
+    		int titleCompare = this.title.compareToIgnoreCase(other.title);
+    		if (titleCompare != 0) return titleCompare;
+		return Float.compare(other.cost, this.cost); // Giảm dần theo cost
+	}
+3) Can we have two ordering rules of the item (by title then cost and by cost then title) if we use this Comparable interface approach? (Có thể có nhiều quy tắc sắp xếp nếu dùng Comparable không?)
+	
+	-Không thể. Interface Comparable chỉ cho phép định nghĩa một quy tắc sắp xếp duy nhất qua phương thức compareTo().
+
+	-Nếu bạn muốn có nhiều cách sắp xếp khác nhau, ví dụ:
+
+		+Sắp theo tiêu đề rồi giá
+
+		+Sắp theo giá rồi tiêu đề: Thì bạn phải dùng các class Comparator khác nhau để tách biệt các tiêu chí.
+4) Suppose the DVDs have a different ordering rule from the other media types, that is by title, then decreasing length, then cost. How would you modify your code to allow this?(Nếu DVD cần một quy tắc sắp xếp riêng (tiêu đề → độ dài giảm dần → giá), thì làm thế nào?)
+	-Vì quy tắc sắp xếp của DVD khác với các media khác, bạn không nên dùng chung compareTo() của Media.
+
+	-Thay vào đó, bạn nên tạo một class Comparator riêng cho DVD
+
+
+
