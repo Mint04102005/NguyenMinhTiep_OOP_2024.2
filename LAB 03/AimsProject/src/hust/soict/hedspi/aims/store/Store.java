@@ -28,5 +28,20 @@ public class Store {
 
         System.out.println("************************************************************************");        
     }
-    
+    public Media searchByTitle(String title){
+        for(Media media : itemsInStore){
+            if(media.isMatch(title)){
+                return media;
+            }
+        }
+        return null;
+    }
+    public Media searchByID(int ID){
+        for(Media media : itemsInStore){
+            if(media.getId() == ID){
+                return media;
+            }
+        }
+        return null;
+    }
 }
